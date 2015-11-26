@@ -4,6 +4,7 @@
 
 import pathlib
 
+
 # ~~~~~~~ CONSTANTS ~~~~~~~
 WALL_CHAR = "2"
 POLE_CHAR = "1"
@@ -14,12 +15,13 @@ OPEN_SPACE_CHAR = "0"
 def getMapFrom(map_file):
     map_chars = []
 
+    # While given path does not exist, ask user for another path
     path = pathlib.Path(map_file)
-    # Get all characters in the given map_file
     while not path.is_file():
         map_file = input("Invalid map_file, try again: ")
         path = pathlib.Path(map_file)
 
+     # Get all characters in the given map_file
     with open(map_file) as f:
         while True:
             c = f.read(1)
@@ -27,11 +29,12 @@ def getMapFrom(map_file):
             if not c:
                 break
 
-    # Remove all '\n'
+    # Remove all '\n' from retrieved characters
     map_chars = [x for x in map_chars if (x != '\n')]
     return map_chars
 
 
+# Write a given list of characters to a given file
 def writeMap(map, file):
     f = open(file, 'w+')
     for char in map:
@@ -39,25 +42,6 @@ def writeMap(map, file):
     f.close()
 
 
-# Get info from user
-map_file = input("Please enter the name of the map file: ")
-# Get the map from the given file
-map_chars = getMapFrom(map_file)
-
-raw_pole_chars = input("Please enter which characters represent poles in a comma separated list: ")
-raw_wall_chars = input("Please enter which characters represent walls in a comma separated list: ")
-raw_open_space_chars = input("Please enter which characters represent open space in a comma separated list: ")
-
-new_map_file = input("Please enter the name of the file you wish to write the converted map to: ")
-
-# Convert raw chars representing walls, poles, and open space to lists
-pole_chars = [x.strip() for x in raw_pole_chars.split(',')]
-wall_chars = [x.strip() for x in raw_wall_chars.split(',')]
-open_space_chars = [x.strip() for x in raw_open_space_chars.split(',')]
-
-
-
-# Convert all characters to wall, pole, or open space characters
 # Checks if character matches any of the given characters, converts appropriately if it does
 def checkChar(char_to_check, pole_chars, wall_chars, open_space_chars):
 
@@ -74,8 +58,25 @@ def checkChar(char_to_check, pole_chars, wall_chars, open_space_chars):
     # If the char to check wasn't found in any of the lists, return it unmodified
     return char_to_check
 
+
+# Get map file to convert from user
+map_file = input("Please enter the name of the map file: ")
+# Get the map from the given file
+map_chars = getMapFrom(map_file)
+
+# Get the characters representing walls, poles, and open space from the user
+raw_pole_chars = input("Please enter which characters represent poles in a comma separated list: ")
+raw_wall_chars = input("Please enter which characters represent walls in a comma separated list: ")
+raw_open_space_chars = input("Please enter which characters represent open space in a comma separated list: ")
+
+# Get the name of the file to write the new map to from the user
+new_map_file = input("Please enter the name of the file you wish to write the converted map to: ")
+
+# Convert raw chars representing walls, poles, and open space to lists
+pole_chars = [x.strip() for x in raw_pole_chars.split(',')]
+wall_chars = [x.strip() for x in raw_wall_chars.split(',')]
+open_space_chars = [x.strip() for x in raw_open_space_chars.split(',')]
+
 map = [checkChar(c, pole_chars, wall_chars, open_space_chars) for c in map_chars]
 
 writeMap(map, new_map_file)
-#Write map to file
-###########################################################################
