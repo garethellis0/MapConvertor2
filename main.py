@@ -11,6 +11,7 @@ POLE_CHAR = "1"
 OPEN_SPACE_CHAR = "0"
 
 
+# ~~~~~~~ FUNCTIONS ~~~~~~~
 # Returns all characters in a given file in a list, with all '\n' removed
 def getMapFrom(map_file):
     map_chars = []
@@ -36,6 +37,19 @@ def getMapFrom(map_file):
 
 # Write a given list of characters to a given file
 def writeMap(map, file):
+    # Check if file exists, ask user to confirm overwrite if it does
+    path = pathlib.Path(file)
+
+    while path.is_file():
+        confirm = "n"
+        confirm = input("The file you're trying to write to already exists, \n"
+                        "are you sure you want to overwrite?(y/n): ")
+        if confirm == "n":
+            file = input("Please enter another file name: ")
+            path = pathlib.Path(file)
+        elif confirm == "y":
+            break
+
     f = open(file, 'w+')
     for char in map:
         f.write(char + '\n')
@@ -59,6 +73,7 @@ def checkChar(char_to_check, pole_chars, wall_chars, open_space_chars):
     return char_to_check
 
 
+# ~~~~~~~ MAIN BODY ~~~~~~~
 # Get map file to convert from user
 map_file = input("Please enter the name of the map file: ")
 # Get the map from the given file
